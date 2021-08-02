@@ -33,9 +33,9 @@ class HrAdvanceOverdueReminder(models.Model):
         res = {}
         for exp in self.expense_sheet_ids:
             if exp.currency_id in res:
-                res[exp.currency_id] += exp.residual
+                res[exp.currency_id] += exp.clearing_residual
             else:
-                res[exp.currency_id] = exp.residual
+                res[exp.currency_id] = exp.clearing_residual
         return res.items()
 
     @api.model
@@ -59,12 +59,6 @@ class HrAdvanceOverdueReminder(models.Model):
             mail_body = mail_tpl_lang._render_template(
                 mail_tpl_lang.body_html, self._name, action.id
             )
-            if mail_tpl.user_signature:
-                signature = self.env.user.signature
-                if signature:
-                    mail_body = tools.append_content_to_html(
-                        mail_body, signature, plaintext=False
-                    )
             mail_body = tools.html_sanitize(mail_body)
         return mail_subject, mail_body
 

@@ -10,13 +10,13 @@
                     name="%(action_advance_overdue_reminder)d"
                     string="Overdue Reminder"
                     type="action"
-                    attrs="{'invisible': ['|', '|', ('overdue', '=', False), ('no_overdue_reminder', '=', True), ('residual', '=', 0.0)]}"
+                    attrs="{'invisible': ['|', '|', ('overdue', '=', False), ('no_overdue_reminder', '=', True), ('clearing_residual', '=', 0.0)]}"
                     context="{'default_partner_ids': [address_id], 'overdue_sheet_ids': context.get('active_ids', False)}"
                     groups="hr.group_hr_manager"
                     class="btn-primary"
                 />
             </field>
-            <field name="residual" position="after">
+            <field name="clearing_residual" position="after">
                 <field name="date_due" />
             </field>
             <notebook position="inside">
@@ -80,7 +80,7 @@
         <field name="view_id" ref="view_hr_expense_sheet_overdue_tree" />
         <field
             name="domain"
-        >[('advance', '!=', False), ('residual', '>', 0.0), ('state', '=', 'done')]</field>
+        >[('advance', '!=', False), ('clearing_residual', '>', 0.0), ('state', '=', 'done')]</field>
         <field
             name="context"
         >{'search_default_overdue_date': 1, 'overdue_advance': 1}</field>

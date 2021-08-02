@@ -8,7 +8,6 @@
         />
         <field name="auto_delete" eval="False" />
         <field name="lang">${object.partner_id.lang}</field>
-        <field name="user_signature" eval="True" />
         <field
             name="email_from"
         >${object.user_id.email or object.company_id.email}</field>
@@ -68,7 +67,10 @@
 % endif
 
 <p>Regards,</p>
-
+% if user.signature:
+    <br/>
+    ${user.signature | safe}
+% endif
 </div>]]>
         </field>
     </record>

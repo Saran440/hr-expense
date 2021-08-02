@@ -78,7 +78,7 @@
                                 <field name="name" string="Order Ref" />
                                 <field name="payment_mode" />
                                 <field name="total_amount" sum="Total" />
-                                <field name="residual" sum="Total" />
+                                <field name="clearing_residual" sum="Total" />
                                 <field
                                     name="overdue_reminder_counter"
                                     string="Current Remind Counter"

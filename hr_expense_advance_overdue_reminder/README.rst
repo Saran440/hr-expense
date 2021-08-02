@@ -13,26 +13,26 @@ Overdue Employee Advance Reminder
 .. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
-.. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fhr-lightgray.png?logo=github
-    :target: https://github.com/OCA/hr/tree/12.0/hr_expense_advance_overdue_reminder
-    :alt: OCA/hr
+.. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fhr--expense-lightgray.png?logo=github
+    :target: https://github.com/OCA/hr-expense/tree/14.0/hr_expense_advance_overdue_reminder
+    :alt: OCA/hr-expense
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/hr-12-0/hr-12-0-hr_expense_advance_overdue_reminder
+    :target: https://translation.odoo-community.org/projects/hr-expense-14-0/hr-expense-14-0-hr_expense_advance_overdue_reminder
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runbot-Try%20me-875A7B.png
-    :target: https://runbot.odoo-community.org/runbot/116/12.0
+    :target: https://runbot.odoo-community.org/runbot/289/14.0
     :alt: Try me on Runbot
 
 |badge1| |badge2| |badge3| |badge4| |badge5| 
 
-This module, allow company to send overdue advance reminders to the employee.
+This module allow company to send overdue advance reminders to the employee.
 it sends a reminder for an expense advance when it has past it's *Due Date*
 An overdue reminder for a employee always include all the overdue advance an amount of that employee.
 
 The module supports a clever expense reimbursement reminder counter mechanism:
 
 * the reminder counter is a property of an expense advance,
-* the reminder counter of each overdue expense advance is incremented when sending a reminder by email. It is not incremented for reminders by phone.
+* the reminder counter of each overdue expense advance is incremented every time when you sending a reminder by email / letter.
 * in an email template, you can configure at *Settings > Technical > Email > Templates > Name 'Overdue Advance Reminder'*
 
 **Table of contents**
@@ -43,13 +43,12 @@ The module supports a clever expense reimbursement reminder counter mechanism:
 Configuration
 =============
 
-Specify the time period for the set due date clearing advance. (default: 30 days)
+To configure this module, you need to:
 
-Go to: Expenses -> Configuration -> Settings -> Default Terms Due Date (days)
-
-e.g. 15 days, Employee created advance 14/08/2020 and
-Company allow to advance an amount to the employee 15/08/2020.
-Due Date will automatic generated to 30/08/2020 (15/08/2020 + 15 days).
+#. Go to *Settings > Technical > Overdue Reminders > Reminder Definition*.
+#. Create as 1 model (hr.expense.sheet).
+#. Specify the time period for the set due date clearing advance. This field is Terms Due Date has default 30 days and it will compute due date by today + Terms Due Date, when you Post Journal Entries on expense sheet.
+#. Specify other fields (if any)
 
 Usage
 =====
@@ -58,36 +57,42 @@ Usage
 
 #. Go to Expenses > My Expenses
 #. Create a new Expense Advance as normal
-#. As normal, Create Report, do Submit to Manager > Approve > Post Journal Entries (Due Date will created when you Post Journal Entries) > Register Payment.
+#. As normal, Create Report > do Submit to Manager > Approve > Post Journal Entries (Due Date will created when you Post Journal Entries) > Register Payment.
 
-**Following Overdue and NOT Clear Advance by Expenses**
+**Following Overdue and NOT Clear Advance by Expenses Form/Tree View**
 
 #. Go to Expenses > Expense Reports > To Overdue.
 #. Open an Advance which is now in overdue to sending expense advance reminders.
 #. Click button "Overdue Reminder".
-#. Check that employee and your bank journals are up-to-date.
-#. Click button "Start" to created a overdue letter
+#. Check information > Click button "Start" to created a overdue reminder
+#. it will generate only document that you selected.
 
 
 **Following Overdue and NOT Clear Advance by Wizard Filter**
 
+#. Go to Expenses > Employee Overdue > Overdue Filters
+#. Filter the partner (partner in address employee) that you want to remind.
+#. Click button "Start" to created a overdue reminder
+
+**Send reminder to employee**
+
 #. Go to Expenses > Employee Overdue > Overdue Reminder
-#. Filter the employee that you want to remind.
-#. Check that your bank journals are up-to-date.
-#. Click button "Start" to created a overdue letter
+#. Select document that you need send reminder to employee.
+#. Click button "Send" to reminder employee.
+
 
 Note:
 
 * Employee filter is related from Private Address
-* you can see letters from Expenses > Employee Overdue > Overdue Letters
+* If you configure "Create Activity" on Reminder Definition, it will automatic create activity next time to remind employee.
 
 Bug Tracker
 ===========
 
-Bugs are tracked on `GitHub Issues <https://github.com/OCA/hr/issues>`_.
+Bugs are tracked on `GitHub Issues <https://github.com/OCA/hr-expense/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/hr/issues/new?body=module:%20hr_expense_advance_overdue_reminder%0Aversion:%2012.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/hr-expense/issues/new?body=module:%20hr_expense_advance_overdue_reminder%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -102,14 +107,10 @@ Authors
 Contributors
 ~~~~~~~~~~~~
 
-* Saran Lim. <saranl@ecosoft.co.th>
+* `Ecosoft <http://ecosoft.co.th>`__:
 
-Other credits
-~~~~~~~~~~~~~
-
-The development of this module has been financially supported by:
-
-* Akretion (alexis-via)
+  * Saran Lim. <saranl@ecosoft.co.th>
+  * Pimolnat Suntian <pimolnats@ecosoft.co.th>
 
 Maintainers
 ~~~~~~~~~~~
@@ -132,6 +133,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-Saran440| 
 
-This module is part of the `OCA/hr <https://github.com/OCA/hr/tree/12.0/hr_expense_advance_overdue_reminder>`_ project on GitHub.
+This module is part of the `OCA/hr-expense <https://github.com/OCA/hr-expense/tree/14.0/hr_expense_advance_overdue_reminder>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

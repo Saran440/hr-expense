@@ -26,7 +26,9 @@ class HrExpenseSheet(models.Model):
         string="Overdue Reminder Action History",
     )
     overdue_reminder_last_date = fields.Date(
-        compute="_compute_overdue_reminder", string="Last Reminder Date", store=True,
+        compute="_compute_overdue_reminder",
+        string="Last Reminder Date",
+        store=True,
     )
     overdue_reminder_counter = fields.Integer(
         string="Reminder Count",
@@ -59,7 +61,8 @@ class HrExpenseSheet(models.Model):
                 exp.overdue = True
 
     @api.depends(
-        "overdue_reminder_ids.date", "overdue_reminder_ids.reminder_type",
+        "overdue_reminder_ids.date",
+        "overdue_reminder_ids.reminder_type",
     )
     def _compute_overdue_reminder(self):
         for exp in self:
@@ -97,7 +100,7 @@ class HrExpenseSheet(models.Model):
         today = self._context.get("date", False) or fields.Date.context_today(self)
         expense_not_overdue = self.filtered(
             lambda exp: not (
-                exp.residual
+                exp.clearing_residual
                 and exp.advance
                 and exp.date_due < today
                 and exp.state == "done"
