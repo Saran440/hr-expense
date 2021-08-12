@@ -16,8 +16,8 @@
                     class="btn-primary"
                 />
             </field>
-            <field name="clearing_residual" position="after">
-                <field name="date_due" />
+            <field name="accounting_date" position="after">
+                <field name="clearing_date_due" />
             </field>
             <notebook position="inside">
                 <page
@@ -56,7 +56,7 @@
                 <filter
                     name="overdue_date"
                     string="Overdue Date"
-                    domain="[('date_due', '&lt;', datetime.date.today().strftime('%Y-%m-%d'))]"
+                    domain="[('clearing_date_due', '&lt;', datetime.date.today().strftime('%Y-%m-%d'))]"
                 />
             </xpath>
         </field>
@@ -68,7 +68,7 @@
         <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_tree" />
         <field name="arch" type="xml">
             <field name="accounting_date" position="after">
-                <field name="date_due" />
+                <field name="clearing_date_due" />
             </field>
         </field>
     </record>

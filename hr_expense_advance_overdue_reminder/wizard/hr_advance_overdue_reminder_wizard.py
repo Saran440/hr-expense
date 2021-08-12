@@ -29,7 +29,7 @@ class HrAdvanceOverdueReminderWizard(models.TransientModel):
         return base_domain
 
     def _prepare_remind_trigger_domain(self, base_domain, date):
-        domain = base_domain + [("date_due", "<", date)]
+        domain = base_domain + [("clearing_date_due", "<", date)]
         if self.partner_ids:
             domain.append(("address_id", "in", self.partner_ids.ids))
         return domain
@@ -56,7 +56,7 @@ class HrAdvanceOverdueReminderWizard(models.TransientModel):
                 base_domain
                 + [
                     ("address_id", "=", partner.id),
-                    ("date_due", "<", date),
+                    ("clearing_date_due", "<", date),
                     # Check min interval
                     "|",
                     ("overdue_reminder_last_date", "=", False),

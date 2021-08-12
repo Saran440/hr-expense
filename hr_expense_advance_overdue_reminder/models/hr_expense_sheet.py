@@ -37,7 +37,7 @@ class HrExpenseSheet(models.Model):
         help="This counter is increased when reminder.",
     )
     overdue = fields.Boolean(compute="_compute_overdue")
-    date_due = fields.Date(string="Due Date", readonly=True)
+    clearing_date_due = fields.Date(string="Clearing Due Date", readonly=True)
 
     _sql_constraints = [
         (
@@ -47,7 +47,7 @@ class HrExpenseSheet(models.Model):
         )
     ]
 
-    @api.depends("state", "date_due")
+    @api.depends("state", "clearing_date_due")
     def _compute_overdue(self):
         today = self._context.get("date", False) or fields.Date.context_today(self)
         for exp in self:
@@ -55,8 +55,8 @@ class HrExpenseSheet(models.Model):
             if (
                 exp.advance
                 and exp.state == "done"
-                and exp.date_due
-                and exp.date_due < today
+                and exp.clearing_date_due
+                and exp.clearing_date_due < today
             ):
                 exp.overdue = True
 
@@ -87,7 +87,7 @@ class HrExpenseSheet(models.Model):
                         )
                     )
                 move_date = res[sheet.id].date
-                sheet.date_due = move_date + relativedelta(
+                sheet.clearing_date_due = move_date + relativedelta(
                     days=reminder.terms_date_due_days or 0.0
                 )
         return res
@@ -102,7 +102,7 @@ class HrExpenseSheet(models.Model):
             lambda exp: not (
                 exp.clearing_residual
                 and exp.advance
-                and exp.date_due < today
+                and exp.clearing_date_due < today
                 and exp.state == "done"
             )
         )

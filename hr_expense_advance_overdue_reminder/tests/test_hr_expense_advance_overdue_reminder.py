@@ -137,13 +137,13 @@ class TestHrExpenseAdvanceOverdueReminder(SavepointCase):
         self.assertEqual(self.sheet.state, "submit")
         self.sheet.approve_expense_sheets()
         self.assertEqual(self.sheet.state, "approve")
-        self.assertFalse(self.sheet.date_due)
+        self.assertFalse(self.sheet.clearing_date_due)
         with self.assertRaises(UserError):
             self.sheet.action_sheet_move_create()
         self._create_reminder_definition(reminder_type)
         self.sheet.action_sheet_move_create()
         self.assertEqual(self.sheet.state, "post")
-        self.assertEqual(self.sheet.date_due, today + relativedelta(days=5))
+        self.assertEqual(self.sheet.clearing_date_due, today + relativedelta(days=5))
         # check state != done should not create wizard overdue
         with self.assertRaises(UserError):
             self.sheet.action_overdue_reminder()
@@ -153,7 +153,9 @@ class TestHrExpenseAdvanceOverdueReminder(SavepointCase):
     def test_01_reminder_email(self):
         self._check_normal_process("mail")
         # Overdue date configured due date < today 1 day
-        self.sheet.date_due = fields.Date.from_string(time.strftime("%Y-05-04"))
+        self.sheet.clearing_date_due = fields.Date.from_string(
+            time.strftime("%Y-05-04")
+        )
         self.assertTrue(self.sheet.overdue)
         self.assertFalse(self.sheet.overdue_reminder_last_date)
         self.assertFalse(self.sheet.overdue_reminder_counter)
@@ -188,7 +190,9 @@ class TestHrExpenseAdvanceOverdueReminder(SavepointCase):
 
     def test_02_reminder_letter(self):
         self._check_normal_process("letter")
-        self.sheet.date_due = fields.Date.from_string(time.strftime("%Y-05-04"))
+        self.sheet.clearing_date_due = fields.Date.from_string(
+            time.strftime("%Y-05-04")
+        )
         self.sheet.address_id = self.partner_1.id
         ctx = self.sheet._context.copy()
         ctx.update({"active_ids": [self.sheet.id], "active_model": "hr.expense.sheet"})

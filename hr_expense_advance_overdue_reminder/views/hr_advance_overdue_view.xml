@@ -74,7 +74,7 @@
                                 <field name="number" />
                                 <field name="employee_id" />
                                 <field name="accounting_date" />
-                                <field name="date_due" />
+                                <field name="clearing_date_due" />
                                 <field name="name" string="Order Ref" />
                                 <field name="payment_mode" />
                                 <field name="total_amount" sum="Total" />
