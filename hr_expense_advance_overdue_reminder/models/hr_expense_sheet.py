@@ -11,6 +11,12 @@ payment_mode_list = {
     "company_account": "Company",
 }
 
+READONLY_STATES = {
+    "post": [("readonly", True)],
+    "done": [("readonly", True)],
+    "cancel": [("readonly", True)],
+}
+
 
 class HrExpenseSheet(models.Model):
     _inherit = "hr.expense.sheet"
@@ -37,7 +43,10 @@ class HrExpenseSheet(models.Model):
         help="This counter is increased when reminder.",
     )
     overdue = fields.Boolean(compute="_compute_overdue")
-    clearing_date_due = fields.Date(string="Clearing Due Date", readonly=True)
+    clearing_date_due = fields.Date(
+        string="Clearing Due Date",
+        states=READONLY_STATES,
+    )
 
     _sql_constraints = [
         (
@@ -77,15 +86,15 @@ class HrExpenseSheet(models.Model):
         reminder = self.env["reminder.definition"].search(
             [("model_id", "=", "hr.expense.sheet")]
         )
-        for sheet in self:
-            if res and sheet.advance:
-                if not reminder:
-                    raise UserError(
-                        _(
-                            "Please configured reminder definition before "
-                            "Post Journal Entries"
-                        )
+        for sheet in self.filtered("advance"):
+            if not reminder:
+                raise UserError(
+                    _(
+                        "Please configured reminder definition before "
+                        "Post Journal Entries"
                     )
+                )
+            if not sheet.clearing_date_due:
                 move_date = res[sheet.id].date
                 sheet.clearing_date_due = move_date + relativedelta(
                     days=reminder.terms_date_due_days or 0.0
