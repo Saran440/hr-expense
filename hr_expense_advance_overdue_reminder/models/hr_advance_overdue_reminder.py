@@ -54,13 +54,13 @@ class HrAdvanceOverdueReminder(models.Model):
                 lang=commercial_partner.lang or "en_US"
             )
             mail_subject = mail_tpl_lang._render_template(
-                mail_tpl_lang.subject, self._name, action.id
+                mail_tpl_lang.subject, self._name, action.ids
             )
             mail_body = mail_tpl_lang._render_template(
-                mail_tpl_lang.body_html, self._name, action.id
+                mail_tpl_lang.body_html, self._name, action.ids
             )
-            mail_body = tools.html_sanitize(mail_body)
-        return mail_subject, mail_body
+            mail_body = tools.html_sanitize(mail_body[action.id])
+        return mail_subject[action.id], mail_body
 
     def _get_report_base_filename(self):
         self.ensure_one()
@@ -125,7 +125,9 @@ class HrAdvanceOverdueReminder(models.Model):
             "hr_expense_advance_overdue_reminder"
             ".hr_advance_overdue_reminder_mail_template"
         )
-        mvals = self.env.ref(xmlid).generate_email(self.id)
+        mvals = self.env.ref(xmlid).generate_email(
+            self.id, ["email_from", "email_to", "partner_to", "reply_to"]
+        )
         mvals.update({"subject": self.mail_subject, "body_html": self.mail_body})
         mvals.pop("attachment_ids", None)
         mvals.pop("attachments", None)

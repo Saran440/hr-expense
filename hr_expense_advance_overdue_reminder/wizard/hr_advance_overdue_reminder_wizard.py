@@ -23,7 +23,7 @@ class HrAdvanceOverdueReminderWizard(models.TransientModel):
             ("company_id", "=", self.company_id.id),
             ("advance", "=", True),
             ("state", "=", "done"),
-            ("residual", ">", 0.0),
+            ("clearing_residual", ">", 0.0),
             ("no_overdue_reminder", "=", False),
         ]
         return base_domain

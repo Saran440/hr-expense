@@ -42,7 +42,7 @@
         <td style="padding: 5px; border: 1px solid black;">${format_date(exp.clearing_date_due)}</td>
         <td style="padding: 5px; border: 1px solid black;">${exp.get_payment_mode(exp.payment_mode)}</td>
         <td style="padding: 5px; border: 1px solid black; text-align: right;">${format_amount(exp.total_amount, exp.currency_id)}</td>
-        <td style="padding: 5px; border: 1px solid black; text-align: right;">${format_amount(exp.residual, exp.currency_id)}</td>
+        <td style="padding: 5px; border: 1px solid black; text-align: right;">${format_amount(exp.clearing_residual, exp.currency_id)}</td>
         <td style="padding: 5px; border: 1px solid black;">${exp.overdue_reminder_counter}</td>
     </tr>
 % endfor
