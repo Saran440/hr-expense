@@ -30,11 +30,16 @@
                     attrs="{'invisible': [('overdue', '=', False)]}"
                     groups="hr.group_hr_manager"
                 >
-                    <group name="overdue_reminder_main" col="4">
-                        <field name="overdue_reminder_counter" />
-                        <field name="no_overdue_reminder" />
-                        <field name="overdue_reminder_last_date" />
-                        <field name="overdue" invisible="1" />
+                    <group name="overdue_reminder_main">
+                        <group name="overdue_information_left">
+                            <field name="overdue_reminder_counter" />
+                            <field name="overdue_reminder_last_date" />
+                            <field name="reminder_next_time" />
+                        </group>
+                        <group name="overdue_information_right">
+                            <field name="no_overdue_reminder" />
+                            <field name="overdue" invisible="1" />
+                        </group>
                     </group>
                     <group name="overdue_reminder_lines">
                         <field name="overdue_reminder_ids" nolabel="1">

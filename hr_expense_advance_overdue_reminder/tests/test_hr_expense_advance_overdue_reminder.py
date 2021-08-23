@@ -88,7 +88,7 @@ class TestHrExpenseAdvanceOverdueReminder(SavepointCase):
             {
                 "name": "HR Advance Definition",
                 "model_id": self.model_id.id,
-                "terms_date_due_days": 5,
+                "clearing_terms_days": 5,
                 "create_activity": True,
                 "activity_summary": "Summary Next",
                 "activity_note": "Note something",

@@ -10,10 +10,11 @@
                 </group>
                 <group name="options" string="Options">
                     <group>
-                        <label for="min_interval_days" />
-                        <div name="min_interval_days">
-                            <field name="min_interval_days" class="oe_inline" /> days
+                        <label for="reminder_number" />
+                        <div name="reminder_number">
+                            <field name="reminder_number" class="oe_inline" /> days
                         </div>
+                        <field name="reminder_next_time" />
                         <field name="create_activity" />
                     </group>
                     <group>

@@ -18,9 +18,27 @@ class HrAdvanceOverdueReminder(models.Model):
         column1="overdue_reminder_id",
         column2="expense_sheet_id",
         string="Overdue Expense Advance Sheet",
+        domain=[("advance", "=", True)],
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
+    mail_body = fields.Html(
+        compute="_compute_html",
+        store=True,
+        states={"draft": [("readonly", False)]},
+    )
+
+    @api.depends("expense_sheet_ids")
+    def _compute_html(self):
+        for rec in self.filtered(lambda l: l.reminder_type == "mail"):
+            mail_tpl_lang = rec.mail_template_id.with_context(
+                lang=rec.commercial_partner_id.lang or "en_US"
+            )
+            mail_body = mail_tpl_lang._render_template(
+                mail_tpl_lang.body_html, rec._name, rec._origin.ids
+            )
+            mail_body = tools.html_sanitize(mail_body[rec._origin.id])
+            rec.mail_body = mail_body
 
     def action_get_mail_view(self):
         action_ref = self.env.ref("mail.action_view_mail_mail")
@@ -39,9 +57,11 @@ class HrAdvanceOverdueReminder(models.Model):
         return res.items()
 
     @api.model
-    def _hook_mail_template(self, action, vals, mail_subject=False, mail_body=False):
-        mail_subject, mail_body = super()._hook_mail_template(
-            action, mail_subject, mail_body
+    def _hook_mail_template(
+        self, action, vals, mail_subject=False, mail_body=False, mail_cc=False
+    ):
+        mail_subject, mail_body, mail_cc = super()._hook_mail_template(
+            action, mail_subject, mail_body, mail_cc
         )
         MailTemplate = self.env["mail.template"]
         model = self._context.get("active_model", False)
@@ -60,7 +80,10 @@ class HrAdvanceOverdueReminder(models.Model):
                 mail_tpl_lang.body_html, self._name, action.ids
             )
             mail_body = tools.html_sanitize(mail_body[action.id])
-        return mail_subject[action.id], mail_body
+            mail_cc = mail_tpl_lang._render_template(
+                mail_tpl_lang.email_cc, self._name, action.ids
+            )
+        return mail_subject[action.id], mail_body, mail_cc[action.id]
 
     def _get_report_base_filename(self):
         self.ensure_one()
@@ -89,7 +112,9 @@ class HrAdvanceOverdueReminder(models.Model):
         IrAttachment = self.env["ir.attachment"]
         for exp in self.expense_sheet_ids:
             if self.letter_report.report_type in ("qweb-html", "qweb-pdf"):
-                report_bin, report_format = self.letter_report.render_qweb_pdf([exp.id])
+                report_bin, report_format = self.letter_report._render_qweb_pdf(
+                    [exp.id]
+                )
             else:
                 res = self.letter_report and self.letter_report.render([exp.id])
                 if not res:
@@ -126,7 +151,7 @@ class HrAdvanceOverdueReminder(models.Model):
             ".hr_advance_overdue_reminder_mail_template"
         )
         mvals = self.env.ref(xmlid).generate_email(
-            self.id, ["email_from", "email_to", "partner_to", "reply_to"]
+            self.id, ["email_from", "email_to", "email_cc", "partner_to", "reply_to"]
         )
         mvals.update({"subject": self.mail_subject, "body_html": self.mail_body})
         mvals.pop("attachment_ids", None)

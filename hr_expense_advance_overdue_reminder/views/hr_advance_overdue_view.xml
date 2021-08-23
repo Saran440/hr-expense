@@ -61,6 +61,7 @@
                                 domain="[('id', 'child_of', commercial_partner_id)]"
                             />
                             <field name="date" />
+                            <field name="reminder_next_time" />
                         </group>
                         <group name="contact">
                             <field name="partner_phone" widget="phone" />
@@ -69,8 +70,12 @@
                         </group>
                     </group>
                     <group name="expense_advance">
-                        <field name="expense_sheet_ids" nolabel="1">
-                            <tree create="false" edit="false">
+                        <field
+                            name="expense_sheet_ids"
+                            nolabel="1"
+                            context="{'search_default_my_reports': 1}"
+                        >
+                            <tree create="0" edit="0">
                                 <field name="number" />
                                 <field name="employee_id" />
                                 <field name="accounting_date" />
@@ -126,6 +131,10 @@
                         <field name="reminder_type" />
                         <field
                             name="mail_template_id"
+                            attrs="{'invisible': [('reminder_type', '!=', 'mail')]}"
+                        />
+                        <field
+                            name="mail_cc"
                             attrs="{'invisible': [('reminder_type', '!=', 'mail')]}"
                         />
                         <field

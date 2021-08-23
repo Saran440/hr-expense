@@ -13,6 +13,9 @@
         >${object.user_id.email or object.company_id.email}</field>
         <field name="email_to">${object.partner_id.email}</field>
         <field
+            name="email_cc"
+        >${object.expense_sheet_ids[0].employee_id.parent_id.address_id.email}</field>
+        <field
             name="subject"
         >${object.company_id.name} - Overdue advance reminder n°${max(object.expense_sheet_ids.mapped('overdue_reminder_counter'))}</field>
         <field
@@ -57,10 +60,6 @@
 </table>
 
 <p>If you made a clearing for these advance a few days ago, please ignore this email.</p>
-
-% if object.company_id.overdue_reminder_attach_invoice:
-<p>You will find enclosed the overdue advance.</p>
-% endif
 
 % if max(object.expense_sheet_ids.mapped('overdue_reminder_counter')) > 2:
 <p>Despite several reminders, we are disappointed to see that these overdue advance are still not clearing. In order to avoid legal proceedings, we urge you to clearing these overdue advance in the next days.</p>

@@ -7,9 +7,7 @@ from odoo import api, fields, models
 class ReminderDefinition(models.Model):
     _inherit = "reminder.definition"
 
-    terms_date_due_days = fields.Integer(
-        string="Default Terms Due Date (days)", default=30
-    )
+    clearing_terms_days = fields.Integer(string="Clearing Terms (days)", default=30)
 
     @api.model
     def _get_reminder_validation_model_names(self):
