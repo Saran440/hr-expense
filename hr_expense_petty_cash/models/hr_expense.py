@@ -61,8 +61,8 @@ class HrExpense(models.Model):
     def _get_account_move_line_values(self):
         res = super()._get_account_move_line_values()
         for expense in self.filtered(lambda p: p.payment_mode == "petty_cash"):
-            line = res[expense.id][1]
+            line = res[expense.id][-1]
             line["account_id"] = expense.petty_cash_id.account_id.id
             line["partner_id"] = expense.petty_cash_id.partner_id.id
-            res[expense.id][1] = line
+            res[expense.id][-1] = line
         return res
