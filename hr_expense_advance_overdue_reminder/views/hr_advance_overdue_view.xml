@@ -179,7 +179,12 @@
                 <field name="partner_id" />
                 <field name="date" />
                 <field name="reminder_type" />
-                <field name="state" />
+                <field
+                    name="state"
+                    widget="badge"
+                    decoration-success="state == 'done'"
+                    decoration-info="state == 'draft'"
+                />
             </tree>
         </field>
     </record>
