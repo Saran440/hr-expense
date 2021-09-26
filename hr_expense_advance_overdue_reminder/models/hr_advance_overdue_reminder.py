@@ -138,6 +138,7 @@ class HrAdvanceOverdueReminder(models.Model):
 
     def validate_mail(self):
         self.ensure_one()
+        self = self.sudo()
         if not self.partner_id.email:
             raise UserError(
                 _("E-mail missing on partner '%s'.") % self.partner_id.display_name

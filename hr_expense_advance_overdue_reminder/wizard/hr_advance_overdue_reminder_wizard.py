@@ -97,6 +97,6 @@ class HrAdvanceOverdueReminderWizard(models.TransientModel):
         vals = self._prepare_reminder(base_domain, today)
         advance_overdue = AdvanceOverdue.create(vals)
         xid = "hr_expense_advance_overdue_reminder.action_hr_advance_overdue_reminder"
-        action = self.env.ref(xid).read()[0]
+        action = self.env.ref(xid).sudo().read()[0]
         action["domain"] = [("id", "in", advance_overdue.ids)]
         return action
